@@ -20,11 +20,14 @@ import {
   filterStateCountriesList,
   getListOfStatesAndCountries,
   getTimezoneOfState,
+  updateWorldClockItemsListWithLatestTime,
 } from '../../store/slice';
 import {
   StateAndCountryDetailsType,
   WorldClockItemType,
 } from '../../store/slice/world-clock/types';
+
+import BackgroundTimer from '../../utils/backgroundTimer';
 
 const HIT_SLOP = {top: 5, left: 5, bottom: 5, right: 5};
 
@@ -41,8 +44,14 @@ const WorldClockScreen = () => {
     filteredStateCountriesList,
   } = useAppSelector(state => state.worldClock);
 
+  const isBackgroundTimerAttachedRef = useRef(false);
+
   useEffect(() => {
     dispatch(getListOfStatesAndCountries());
+
+    return () => {
+      BackgroundTimer.stopBackgroundTimer();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,10 +69,20 @@ const WorldClockScreen = () => {
     setSearchText(text);
   };
 
+  const attachBackgroundListener = () => {
+    if (!isBackgroundTimerAttachedRef.current) {
+      isBackgroundTimerAttachedRef.current = true;
+      BackgroundTimer.runBackgroundTimer(() => {
+        dispatch(updateWorldClockItemsListWithLatestTime());
+      }, 60 * 1000);
+    }
+  };
+
   const renderItem = ({item}: {item: StateAndCountryDetailsType}) => {
     return (
       <TouchableOpacity
         onPress={() => {
+          attachBackgroundListener();
           dispatch(getTimezoneOfState(item));
           setSearchText('');
           setIsModalVisible(false);

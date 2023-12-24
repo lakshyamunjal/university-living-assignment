@@ -78,6 +78,26 @@ export const worldClockSlice = createSlice({
     clearFilteredStateCountryList: state => {
       state.filteredStateCountriesList = [];
     },
+    updateWorldClockItemsListWithLatestTime: state => {
+      state.worldClocksList = state.worldClocksList.map(item => {
+        const latestMoment = moment(item.datetime);
+        latestMoment.add(1, 'minutes');
+
+        const {dayLabel, timeDifference} = getTimeDifferenceAndDay(
+          latestMoment.toISOString(),
+        );
+
+        const listItem: WorldClockItemType = {
+          ...item,
+          datetime: latestMoment.toISOString(),
+          formattedTime: latestMoment.format('LT'),
+          timeDifference,
+        };
+        listItem.label = dayLabel;
+
+        return listItem;
+      });
+    },
   },
   extraReducers: builder => {
     builder.addCase(getListOfStatesAndCountries.pending, state => {
@@ -102,9 +122,10 @@ export const worldClockSlice = createSlice({
       if (data) {
         const {datetime, requested_location} = data;
         const {dayLabel, timeDifference} = getTimeDifferenceAndDay(datetime);
+        const dateTimeISO = moment(datetime).toISOString();
 
         const listItem: WorldClockItemType = {
-          datetime,
+          datetime: dateTimeISO,
           location: requested_location,
           formattedTime: moment(datetime).format('LT'),
           timeDifference,
@@ -127,5 +148,6 @@ export const {
   setIsStateCountriesListLoading,
   filterStateCountriesList,
   clearFilteredStateCountryList,
+  updateWorldClockItemsListWithLatestTime,
 } = worldClockSlice.actions;
 export const {reducer: worldClockSliceReducer} = worldClockSlice;

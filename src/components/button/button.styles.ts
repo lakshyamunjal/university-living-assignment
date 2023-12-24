@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
   text: {
     color: 'black',
   },
+  disabled: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
 });
 
 export {styles};

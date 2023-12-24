@@ -115,10 +115,15 @@ const WorldClockScreen = () => {
       <View
         style={[styles.worldClockItem, isLastRow ? styles.lastRowBorder : {}]}>
         <View>
-          <Text>
+          <Text style={styles.timeLabel}>
             {item.label}, {item.timeDifference}
           </Text>
-          <Text style={styles.stateNameText}>{item.stateName}</Text>
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            style={styles.stateNameText}>
+            {item.stateName}
+          </Text>
         </View>
         <Text style={styles.timeText}>{item.formattedTime}</Text>
       </View>

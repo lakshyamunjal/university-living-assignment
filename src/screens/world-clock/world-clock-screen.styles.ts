@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {flex: 1},
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   crossIconPosition: {position: 'absolute', right: 5, paddingTop: 10},
   crossIcon: {width: 16, height: 16},
   cancelText: {color: 'black', fontSize: 16},
+  timeLabel: {color: 'gray'},
   worldClockContainer: {flex: 1},
   worldClockItem: {
     borderTopWidth: 1,
@@ -57,7 +58,11 @@ const styles = StyleSheet.create({
   },
   timeText: {fontSize: 32, fontWeight: '500', color: 'black'},
   stateListContainer: {marginLeft: 10},
-  stateNameText: {fontSize: 20, color: 'black'},
+  stateNameText: {
+    fontSize: 20,
+    color: 'black',
+    width: Dimensions.get('screen').width * 0.6,
+  },
   lastRowBorder: {borderBottomWidth: 1},
   emptyListContainer: {
     flex: 1,
